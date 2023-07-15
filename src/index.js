@@ -1,6 +1,14 @@
 import React, { useEffect } from "react"
 import ReactDOM from "react-dom"
-import { titleChanged, taskDeleted, completeTask, loadTasks, getTasks, getTasksLoadingStatus } from "./store/task"
+import {
+    titleChanged,
+    taskDeleted,
+    completeTask,
+    loadTasks,
+    getTasks,
+    getTasksLoadingStatus,
+    createTask,
+} from "./store/task"
 import configureStore from "./store/store"
 import { Provider } from "react-redux"
 import { useSelector, useDispatch } from "react-redux"
@@ -9,8 +17,12 @@ import { getError } from "./store/errors"
 const store = configureStore()
 
 const App = (params) => {
-    const state = useSelector(getTasks())
-    const isLoading = useSelector(getTasksLoadingStatus())
+    // const state = useSelector(getTasks())
+    const state = useSelector(getTasks)
+
+    // const isLoading = useSelector(getTasksLoadingStatus())
+    const isLoading = useSelector(getTasksLoadingStatus)
+
     const error = useSelector(getError())
     const dispatch = useDispatch()
 
@@ -24,6 +36,9 @@ const App = (params) => {
     const deleteTask = (taskId) => {
         dispatch(taskDeleted(taskId))
     }
+
+    const newTask = { title: "My new task", completed: false }
+
     if (isLoading) {
         return <h1>Loading</h1>
     }
@@ -34,7 +49,7 @@ const App = (params) => {
     return (
         <>
             <h1> App</h1>
-            <button>Create new task</button>
+            <button onClick={() => dispatch(createTask(newTask))}>Create new task</button>
             <ul>
                 {state.map((el) => (
                     <li key={el.id}>
